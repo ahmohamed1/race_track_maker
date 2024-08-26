@@ -1,0 +1,30 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/abdll/workshop/alphabot_ws/install/multirobot_map_merge/include/**",
+        "/home/abdll/workshop/alphabot_ws/install/explore_lite/include/**",
+        "/home/abdll/workshop/alphabot_ws/install/alphabot_mapping/include/**",
+        "/home/abdll/workshop/alphabot_ws/install/alphabot_firmware/include/**",
+        "/opt/ros/humble/include/**",
+        "/home/abdll/workshop/alphabot_ws/src/alphabot/alphabot_firmware/include/**",
+        "/home/abdll/workshop/alphabot_ws/src/alphabot/alphabot_mapping/include/**",
+        "/home/abdll/workshop/alphabot_ws/src/alphabot/alphabot_mpu6050/include/**",
+        "/home/abdll/workshop/alphabot_ws/src/alphabot/alphabot_utils/include/**",
+        "/home/abdll/workshop/alphabot_ws/src/m-explore-ros2/explore/include/**",
+        "/home/abdll/workshop/alphabot_ws/src/m-explore-ros2/map_merge/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}
