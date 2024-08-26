@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import shapely.geometry as shp
-import shapely.ops as ops
+from shapely.ops import unary_union
 
 class TrackGenerator:
     def __init__(self, track_width=4.0, wall_height=1.0, wall_thickness=0.1):
@@ -20,7 +20,7 @@ class TrackGenerator:
         self.track_points = track_points
         
 
-    def plot_offset_polygons(self, buffer_value=0.03):
+    def plot_offset_polygons(self, buffer_value=0.03, coin_track=False):
         """
         Creates a polygon from a list of points and plots the original 
         and offset polygons (representing walls).
@@ -43,6 +43,10 @@ class TrackGenerator:
         outward_polygon = shp.Polygon(outward_offset_line) if outward_offset_line else None
         inward_polygon = shp.Polygon(inward_offset_line) if inward_offset_line else None
 
+        if coin_track:
+          oo_points = self.split_line(outward_polygon)
+          in_points = self.split_line(inward_polygon)
+
         # Convert to numpy arrays for plotting
         track_pts = np.array(track_line.coords)
         outward_pts = np.array(outward_polygon.exterior.coords) if outward_polygon else None
@@ -54,11 +58,40 @@ class TrackGenerator:
             plt.plot(*outward_pts.T, color='red', label='Left Wall (Outward Offset)')
         if inward_pts is not None:
             plt.plot(*inward_pts.T, color='green', label='Right Wall (Inward Offset)')
+        
+        if coin_track:
+          # Extract the x and y coordinates from the MultiPoint object
+          oo_x, oo_y = zip(*[(point.x, point.y) for point in oo_points.geoms])
+          plt.plot(oo_x, oo_y, 'ro')
+          # Extract the x and y coordinates from the MultiPoint object
+          in_x, in_y = zip(*[(point.x, point.y) for point in in_points.geoms])
+          plt.plot(in_x, in_y, 'go')
         plt.axis('equal')
         plt.legend()
         plt.show()
 
         return outward_offset_line, inward_offset_line
+
+
+    '''
+      This new function to divide the line based on the delta distance
+      https://stackoverflow.com/questions/62990029/how-to-get-equally-spaced-points-on-a-line-in-shapely    
+    ''' 
+    def split_line(self, polygon_or_line, distance_delta=0.9):
+        if isinstance(polygon_or_line, shp.Polygon):
+            line = shp.LineString(polygon_or_line.exterior.coords)
+        else:
+            line = polygon_or_line
+
+        distances = np.arange(0, line.length, distance_delta)
+        points = [line.interpolate(distance) for distance in distances]
+        
+        # Ensure that the first and last points are included
+        points = [line.interpolate(0)] + points + [line.interpolate(line.length)]
+
+        multipoint = unary_union(points)
+        return multipoint
+
 
     def generate_wall_segments(self, line):
         """
