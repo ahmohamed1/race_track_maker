@@ -21,6 +21,9 @@ class GridGraphicsView(QGraphicsView):
         self.grid_step = 40  # Distance between grid lines
         self.bold_pen = QPen(QColor(255, 182, 193), 2, Qt.SolidLine)  # Light red color
         self.normal_pen = QPen(Qt.lightGray, 0.5, Qt.DotLine)  # Pen for normal grid lines
+        self.text_pen = QPen(Qt.black)  # Pen for text labels
+        self.text_offset_x = 20  # Offset for x-axis text positioning
+        self.text_offset_y = 15  # Offset for y-axis text positioning
 
     def drawBackground(self, painter: QPainter, rect: QRectF):
         super().drawBackground(painter, rect)
@@ -49,6 +52,23 @@ class GridGraphicsView(QGraphicsView):
         painter.drawLine(0, top, 0, bottom)
         # Horizontal center line
         painter.drawLine(left, 0, right, 0)
+
+        # Draw numbers along the x-axis (bottom edge)
+        painter.setPen(self.text_pen)
+        x = left - (left % self.grid_step)
+        while x < right:
+            # if x != 0:  # Avoid drawing 0 at the center
+            grid_x = x // self.grid_step
+            painter.drawText(x + self.text_offset_x, bottom - self.text_offset_y, f"{grid_x}")
+            x += self.grid_step
+
+        # Draw numbers along the y-axis (right edge)
+        y = top - (top % self.grid_step)
+        while y < bottom:
+            # if y != 0:  # Avoid drawing 0 at the center
+            grid_y = -y // self.grid_step  # Invert y-axis for correct coordinates
+            painter.drawText(-right , y - self.text_offset_y, f"{grid_y}")
+            y += self.grid_step
 
 class SplineDrawer(QMainWindow):
     def __init__(self):
@@ -193,14 +213,13 @@ class SplineDrawer(QMainWindow):
         for i, point in enumerate(self.points):
             # print(f"({point.x()}, {point.y()})")
             x_.append(point.x()/scaler)
-            y_.append(point.y()/scaler)
+            y_.append((point.y()/scaler)*-1)
         x_smooth, y_smooth = gaussian_smooth(x_, y_, 7)  # s=0 ensures interpolation through all points
         for i, point in enumerate(x_smooth):
             point_list.append((x_smooth[i],y_smooth[i]))
         
         close_loop_status = self.close_loop_checkbox.isChecked()
-        print(close_loop_status)
-        self.track_generator.generate_track_world(point_list, close_loop_status,track_width_)
+        self.track_generator.generate_track_world(point_list, close_loop_status,track_width_, track_height_)
 
         print("Path generated")
         
