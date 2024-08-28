@@ -81,7 +81,7 @@ class TrackGenerator:
         with open(file_name, 'w') as f:
           # using csv.writer method from CSV package
           write = csv.writer(f)
-          write.writerows("x,y")
+          write.writerow(["x", "y"])  # Header should be a list
           write.writerows(self.track_points)
 
         # Plotting
@@ -156,7 +156,6 @@ class TrackGenerator:
         return wall_segments
 
     def generate_track_world(self,track_points, file_name_, closed_loop=False, track_width = 4, track_height = 1):
-        print("AAAAAAAAAAA: ",file_name_)
         self.file_name = file_name_
         self.track_width = track_width
         self.wall_height = track_height

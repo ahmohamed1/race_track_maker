@@ -223,7 +223,6 @@ class SplineDrawer(QMainWindow):
         track_width_ = float(self.track_width_input.text())
         track_height_ = float(self.track_height_input.text())
         self.file_name = self.file_name_input.text()
-        print(self.file_name)
         for i, point in enumerate(self.points):
             # print(f"({point.x()}, {point.y()})")
             x_.append(point.x()/scaler)
