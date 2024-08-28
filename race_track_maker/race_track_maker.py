@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import shapely.geometry as shp
 from shapely.ops import unary_union
 import csv
-
+import os
 
 class TrackGenerator:
     def __init__(self, track_width=4.0, wall_height=1.0, wall_thickness=0.1):
@@ -31,7 +31,6 @@ class TrackGenerator:
         Returns the outward and inward polygons.
         """
         track_line = shp.LineString(self.track_points)
-
         # Create offset lines
         outward_offset_line = track_line.parallel_offset(buffer_value, side='left')
         inward_offset_line = track_line.parallel_offset(buffer_value, side='right')
@@ -72,6 +71,13 @@ class TrackGenerator:
 
         # Save the path
         file_name = self.file_name + ".csv"
+
+        # Check if the file exists
+        if os.path.exists(file_name):
+            os.remove(file_name)  # Delete the file if it exists
+
+
+
         with open(file_name, 'w') as f:
           # using csv.writer method from CSV package
           write = csv.writer(f)
@@ -150,12 +156,11 @@ class TrackGenerator:
         return wall_segments
 
     def generate_track_world(self,track_points, file_name_, closed_loop=False, track_width = 4, track_height = 1):
-        
+        print("AAAAAAAAAAA: ",file_name_)
         self.file_name = file_name_
         self.track_width = track_width
         self.wall_height = track_height
         self.set_track_points(track_points, closed_loop=closed_loop)
-
         """
         Generates a Gazebo world file based on track points and offset walls.
         """
@@ -235,8 +240,9 @@ class TrackGenerator:
 
             world_content = world_template.format(walls=walls)
 
-            file_name = self.file_name +".world"
-            with open(file_name, "w") as world_file:
+            file_name_ = self.file_name +".world"
+            print(file_name_)
+            with open(file_name_, "w") as world_file:
                 world_file.write(world_content)
         else:
             print("Unable to generate offset lines. Please check your track points.")

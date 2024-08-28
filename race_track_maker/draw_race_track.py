@@ -117,6 +117,10 @@ class SplineDrawer(QMainWindow):
         self.track_height_input = QLineEdit()
         self.track_height_input.setText(str(self.track_height))
 
+        self.file_name_label = QLabel("file name")
+        self.file_name_input = QLineEdit()
+        self.file_name_input.setText(str(self.file_name))
+
         # Create buttons
         self.clear_button = QPushButton("Clear Spline")
         self.print_button = QPushButton("Generate path")
@@ -140,17 +144,24 @@ class SplineDrawer(QMainWindow):
         self.track_height_layout.addWidget(self.track_height_label)
         self.track_height_layout.addWidget(self.track_height_input)
 
+
+        self.file_name_layout = QVBoxLayout()
+        self.file_name_layout.addWidget(self.file_name_label)
+        self.file_name_layout.addWidget(self.file_name_input)
+
         # Create a horizontal layout to hold the vertical layouts
         self.input_layout = QHBoxLayout()
         self.input_layout.addLayout(self.scaler_layout)
         self.input_layout.addLayout(self.track_width_layout)
         self.input_layout.addLayout(self.track_height_layout)
-        
+        self.input_layout.addLayout(self.file_name_layout)
+
         # Create horizontal layout for buttons
         self.button_layout = QHBoxLayout()
         self.button_layout.addWidget(self.clear_button)
         self.button_layout.addWidget(self.print_button)
         self.button_layout.addWidget(self.close_loop_checkbox)
+        
 
         # Set up layout
         layout = QVBoxLayout()
@@ -211,6 +222,8 @@ class SplineDrawer(QMainWindow):
         scaler = float(self.scaler_input.text())
         track_width_ = float(self.track_width_input.text())
         track_height_ = float(self.track_height_input.text())
+        self.file_name = self.file_name_input.text()
+        print(self.file_name)
         for i, point in enumerate(self.points):
             # print(f"({point.x()}, {point.y()})")
             x_.append(point.x()/scaler)
