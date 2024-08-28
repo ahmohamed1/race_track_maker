@@ -125,6 +125,7 @@ class SplineDrawer(QMainWindow):
         self.clear_button = QPushButton("Clear Spline")
         self.print_button = QPushButton("Generate path")
         self.close_loop_checkbox = QCheckBox("Close Loop tracks")
+        self.smooth_path_checkbox = QCheckBox("Smooth path(Note smooth will not work with small number of lines)")
 
         # Connect buttons
         self.clear_button.clicked.connect(self.clear_spline)
@@ -149,6 +150,11 @@ class SplineDrawer(QMainWindow):
         self.file_name_layout.addWidget(self.file_name_label)
         self.file_name_layout.addWidget(self.file_name_input)
 
+        # Create check vertical
+        self.checks_layout = QVBoxLayout()
+        self.checks_layout.addWidget(self.close_loop_checkbox)
+        self.checks_layout.addWidget(self.smooth_path_checkbox)
+
         # Create a horizontal layout to hold the vertical layouts
         self.input_layout = QHBoxLayout()
         self.input_layout.addLayout(self.scaler_layout)
@@ -160,7 +166,7 @@ class SplineDrawer(QMainWindow):
         self.button_layout = QHBoxLayout()
         self.button_layout.addWidget(self.clear_button)
         self.button_layout.addWidget(self.print_button)
-        self.button_layout.addWidget(self.close_loop_checkbox)
+        self.button_layout.addLayout(self.checks_layout)
         
 
         # Set up layout
@@ -227,9 +233,10 @@ class SplineDrawer(QMainWindow):
             # print(f"({point.x()}, {point.y()})")
             x_.append(point.x()/scaler)
             y_.append((point.y()/scaler)*-1)
-        x_smooth, y_smooth = gaussian_smooth(x_, y_, 7)  # s=0 ensures interpolation through all points
-        for i, point in enumerate(x_smooth):
-            point_list.append((x_smooth[i],y_smooth[i]))
+        if self.smooth_path_checkbox.isChecked():
+            x_, y_ = gaussian_smooth(x_, y_, 7)  # s=0 ensures interpolation through all points
+        for i, point in enumerate(x_):
+            point_list.append((x_[i],y_[i]))
         
         close_loop_status = self.close_loop_checkbox.isChecked()
         self.track_generator.generate_track_world(point_list, self.file_name, close_loop_status,track_width_, track_height_)
