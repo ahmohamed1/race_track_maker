@@ -2,6 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import shapely.geometry as shp
 from shapely.ops import unary_union
+import csv
+
 
 class TrackGenerator:
     def __init__(self, track_width=4.0, wall_height=1.0, wall_thickness=0.1):
@@ -9,6 +11,7 @@ class TrackGenerator:
         self.wall_height = wall_height
         self.wall_thickness = wall_thickness
         self.track_points = []
+        self.file_name = None
 
     def set_track_points(self, track_points, closed_loop=False):
         """
@@ -39,10 +42,25 @@ class TrackGenerator:
         if inward_offset_line.is_empty:
             inward_offset_line = None
 
+        # Ensure both lines have enough points
+        if outward_offset_line and outward_offset_line.length >= 4:
+            outward_polygon = shp.Polygon(outward_offset_line)
+        else:
+            outward_polygon = None
+            print("Warning: Not enough points to create an outward polygon.")
+            return None, None
+        
+        if inward_offset_line and inward_offset_line.length >= 4:
+            inward_polygon = shp.Polygon(inward_offset_line)
+        else:
+            inward_polygon = None
+            print("Warning: Not enough points to create an inward polygon.")
+            return None, None
+
         # Convert to polygons if offset lines are valid
         outward_polygon = shp.Polygon(outward_offset_line) if outward_offset_line else None
         inward_polygon = shp.Polygon(inward_offset_line) if inward_offset_line else None
-
+        
         if coin_track:
           oo_points = self.split_line(outward_polygon)
           in_points = self.split_line(inward_polygon)
@@ -51,6 +69,14 @@ class TrackGenerator:
         track_pts = np.array(track_line.coords)
         outward_pts = np.array(outward_polygon.exterior.coords) if outward_polygon else None
         inward_pts = np.array(inward_polygon.exterior.coords) if inward_polygon else None
+
+        # Save the path
+        file_name = self.file_name + ".csv"
+        with open(file_name, 'w') as f:
+          # using csv.writer method from CSV package
+          write = csv.writer(f)
+          write.writerows("x,y")
+          write.writerows(self.track_points)
 
         # Plotting
         plt.plot(*track_pts.T, color='black', label='Original Track Line')
@@ -123,8 +149,9 @@ class TrackGenerator:
         
         return wall_segments
 
-    def generate_track_world(self,track_points, closed_loop=False, track_width = 4, track_height = 1):
+    def generate_track_world(self,track_points, file_name_, closed_loop=False, track_width = 4, track_height = 1):
         
+        self.file_name = file_name_
         self.track_width = track_width
         self.wall_height = track_height
         self.set_track_points(track_points, closed_loop=closed_loop)
@@ -208,7 +235,8 @@ class TrackGenerator:
 
             world_content = world_template.format(walls=walls)
 
-            with open("race_track_with_walls.world", "w") as world_file:
+            file_name = self.file_name +".world"
+            with open(file_name, "w") as world_file:
                 world_file.write(world_content)
         else:
             print("Unable to generate offset lines. Please check your track points.")

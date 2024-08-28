@@ -78,6 +78,7 @@ class SplineDrawer(QMainWindow):
         self.track_width = 4
         self.track_height = 1
         self.track_generator = TrackGenerator(track_width=self.track_width)
+        self.file_name = "race_track"
 
         self.setWindowTitle("Race Track Maker")
         self.setGeometry(100, 100, 800, 600)
@@ -219,7 +220,7 @@ class SplineDrawer(QMainWindow):
             point_list.append((x_smooth[i],y_smooth[i]))
         
         close_loop_status = self.close_loop_checkbox.isChecked()
-        self.track_generator.generate_track_world(point_list, close_loop_status,track_width_, track_height_)
+        self.track_generator.generate_track_world(point_list, self.file_name, close_loop_status,track_width_, track_height_)
 
         print("Path generated")
         
