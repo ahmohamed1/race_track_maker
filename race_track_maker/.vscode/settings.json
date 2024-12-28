@@ -1,0 +1,18 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/home/abdll/workspace/alphabot_ws/install/race_track_maker/local/lib/python3.10/dist-packages",
+        "/home/abdll/workspace/alphabot_ws/install/alphabot_utils/local/lib/python3.10/dist-packages",
+        "/home/abdll/workspace/alphabot_ws/install/alphabot_mapping/local/lib/python3.10/dist-packages",
+        "/home/abdll/workspace/alphabot_ws/install/alphabot_firmware/local/lib/python3.10/dist-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/abdll/workspace/alphabot_ws/install/race_track_maker/local/lib/python3.10/dist-packages",
+        "/home/abdll/workspace/alphabot_ws/install/alphabot_utils/local/lib/python3.10/dist-packages",
+        "/home/abdll/workspace/alphabot_ws/install/alphabot_mapping/local/lib/python3.10/dist-packages",
+        "/home/abdll/workspace/alphabot_ws/install/alphabot_firmware/local/lib/python3.10/dist-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ]
+}

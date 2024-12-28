@@ -1,0 +1,30 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/abdll/workspace/alphabot_ws/install/alphabot_mapping/include/**",
+        "/home/abdll/workspace/alphabot_ws/install/alphabot_firmware/include/**",
+        "/opt/ros/humble/include/**",
+        "/home/abdll/workspace/alphabot_ws/src/alphabot/alphabot_firmware/include/**",
+        "/home/abdll/workspace/alphabot_ws/src/alphabot/alphabot_localization/include/**",
+        "/home/abdll/workspace/alphabot_ws/src/alphabot/alphabot_mapping/include/**",
+        "/home/abdll/workspace/alphabot_ws/src/alphabot/alphabot_mpu6050/include/**",
+        "/home/abdll/workspace/alphabot_ws/src/alphabot/alphabot_utils/include/**",
+        "/home/abdll/workspace/alphabot_ws/src/rf2o_laser_odometry/include/**",
+        "/home/abdll/workspace/alphabot_ws/src/ros2_cpp_examples/include/**",
+        "/home/abdll/workspace/alphabot_ws/src/xv_11_driver/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}

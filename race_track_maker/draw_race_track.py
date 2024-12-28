@@ -82,6 +82,7 @@ class SplineDrawer(QMainWindow):
 
         self.setWindowTitle("Race Track Maker")
         self.setGeometry(100, 100, 800, 600)
+        # self.showMaximized()
 
         # Set up the graphics view and scene
         self.view = GridGraphicsView(self)
