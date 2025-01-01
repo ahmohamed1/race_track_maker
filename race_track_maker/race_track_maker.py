@@ -4,6 +4,7 @@ import shapely.geometry as shp
 from shapely.ops import unary_union
 import csv
 import os
+from helper.generate_3d_mesh import *
 
 class TrackGenerator:
     def __init__(self, track_width=4.0, wall_height=1.0, wall_thickness=0.1):
@@ -210,7 +211,11 @@ class TrackGenerator:
 
         # Plot and get the offset lines
         outward_line, inward_line = self.plot_offset_polygons(buffer_value=self.track_width / 2.0)
-
+        mesh_obj = []
+        mesh_obj.append(generate_3d_mesh(outward_line, 1, True))
+        mesh_obj.append(generate_3d_mesh(inward_line, 1, True))
+        mesh_obj = combine_meshes(mesh_obj)
+        mesh_obj.save('output.stl')
         if outward_line:
             # Generate wall segments for left and right walls
             outward_wall_segments = self.generate_wall_segments(outward_line)

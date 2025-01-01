@@ -241,7 +241,7 @@ class SplineDrawer(QMainWindow):
         
         close_loop_status = self.close_loop_checkbox.isChecked()
         self.track_generator.generate_track_world(point_list, self.file_name, close_loop_status,track_width_, track_height_)
-
+        # print(point_list)
         print("Path generated")
         
 
