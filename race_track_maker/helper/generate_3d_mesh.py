@@ -66,16 +66,16 @@ def combine_meshes(mesh_list):
 
     return combined_mesh
 
-# Example usage
-points1 = [(-1.4, 1.375), (-1.4, 1.4), (-1.375, 1.425), (-1.35, 1.45), (-1.3, 1.525)]
-points2 = [(0.5, -0.5), (0.6, -0.6), (0.7, -0.7), (0.8, -0.8), (0.9, -0.9)]
+# # Example usage
+# points1 = [(-1.4, 1.375), (-1.4, 1.4), (-1.375, 1.425), (-1.35, 1.45), (-1.3, 1.525)]
+# points2 = [(0.5, -0.5), (0.6, -0.6), (0.7, -0.7), (0.8, -0.8), (0.9, -0.9)]
 
-# Generate two meshes
-mesh1 = generate_3d_mesh(points1, height=1.0, is_closed=False)
-mesh2 = generate_3d_mesh(points2, height=1.0, is_closed=False)
+# # Generate two meshes
+# mesh1 = generate_3d_mesh(points1, height=1.0, is_closed=False)
+# mesh2 = generate_3d_mesh(points2, height=1.0, is_closed=False)
 
-# Combine meshes into one
-combined_mesh = combine_meshes([mesh1, mesh2])
+# # Combine meshes into one
+# combined_mesh = combine_meshes([mesh1, mesh2])
 
-# Save the combined mesh to a single STL file
-combined_mesh.save('combined_output.stl')
+# # Save the combined mesh to a single STL file
+# combined_mesh.save('combined_output.stl')
