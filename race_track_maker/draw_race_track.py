@@ -126,6 +126,8 @@ class SplineDrawer(QMainWindow):
         self.clear_button = QPushButton("Clear Spline")
         self.print_button = QPushButton("Generate path")
         self.close_loop_checkbox = QCheckBox("Close Loop tracks")
+        self.cone_track_checkbox = QCheckBox("Cone track")
+        self.show_gazebo_checkbox = QCheckBox("Open Gazebo")
         self.smooth_path_checkbox = QCheckBox("Smooth path(Note smooth will not work with small number of lines)")
 
         # Connect buttons
@@ -152,8 +154,14 @@ class SplineDrawer(QMainWindow):
         self.file_name_layout.addWidget(self.file_name_input)
 
         # Create check vertical
+
+        self.check_doublelayout = QHBoxLayout()
+        self.check_doublelayout.addWidget(self.close_loop_checkbox)
+        self.check_doublelayout.addWidget(self.cone_track_checkbox)
+        self.check_doublelayout.addWidget(self.show_gazebo_checkbox)
         self.checks_layout = QVBoxLayout()
-        self.checks_layout.addWidget(self.close_loop_checkbox)
+        self.checks_layout.addLayout(self.check_doublelayout)
+        # self.checks_layout.addWidget(self.cone_track_checkbox)
         self.checks_layout.addWidget(self.smooth_path_checkbox)
 
         # Create a horizontal layout to hold the vertical layouts
@@ -174,7 +182,6 @@ class SplineDrawer(QMainWindow):
         layout = QVBoxLayout()
         layout.addWidget(self.view)
         layout.addLayout(self.input_layout)  # Add the input_layout here
-        # layout.addWidget(self.close_loop_checkbox)
         layout.addLayout(self.button_layout)  # Add the button_layout here
 
         container = QWidget()
@@ -240,7 +247,9 @@ class SplineDrawer(QMainWindow):
             point_list.append((x_[i],y_[i]))
         
         close_loop_status = self.close_loop_checkbox.isChecked()
-        self.track_generator.generate_track_world(point_list, self.file_name, close_loop_status,track_width_, track_height_)
+        cone_track_status = self.cone_track_checkbox.isChecked()
+        show_gazebo = self.show_gazebo_checkbox.isChecked()
+        self.track_generator.generate_track_world(point_list, self.file_name, cone_track_status, close_loop_status,track_width_, track_height_, show_gazebo)
         # print(point_list)
         print("Path generated")
         

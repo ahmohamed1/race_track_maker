@@ -227,12 +227,7 @@ class TrackGenerator:
         walls = ""
 
         # Plot and get the offset lines
-        outward_line, inward_line, outward_pts, inward_pts = self.plot_offset_polygons(buffer_value=self.track_width / 2.0)
-        # mesh_obj = []
-        # mesh_obj.append(generate_3d_mesh(outward_pts, 1, closed_loop))
-        # mesh_obj.append(generate_3d_mesh(inward_pts, 1, closed_loop))
-        # mesh_obj = combine_meshes(mesh_obj)
-        # mesh_obj.save('output.stl')
+        outward_line, inward_line, _, _ = self.plot_offset_polygons(buffer_value=self.track_width / 2.0)
         if outward_line:
             # Generate wall segments for left and right walls
             outward_wall_segments = self.generate_wall_segments(outward_line)
@@ -268,21 +263,23 @@ class TrackGenerator:
         else:
             print("Unable to generate offset lines. Please check your track points.")
     
-    def generateConeTrack(self, track_points, file_name_, closed_loop, track_width = 4):
+    def generateConeTrack(self, track_points, file_name_, closed_loop, track_width = 4, show_gazebo=False):
         self.file_name = file_name_
         self.track_width = track_width
         self.set_track_points(track_points, closed_loop=closed_loop)
         _, _, outward_pts, inward_pts = self.plot_offset_polygons(buffer_value=self.track_width / 2.0, coin_track=True)
         stl_path = "cone_green.stl"  # Replace with your STL file path
-        output_file = "my_cone_world.world"
+        output_file = file_name_+".world"
         
         create_gazebo_world([outward_pts, inward_pts], stl_path, output_file, [(0.0, 0.0, 1.0),(1.0, 1.0, 0.0)])
-        os.system(f'gazebo {output_file}')
+        if show_gazebo:
+            os.system(f'gazebo {output_file}')
 
     
-    def generate_track_world(self,track_points, file_name_, closed_loop=False, track_width = 4, track_height = 1):
+    def generate_track_world(self,track_points, file_name_, cone_track_status, closed_loop=False, track_width = 4, track_height = 1, show_gazebo=False):
+        self.coin_track = cone_track_status
         if self.coin_track:
-            self.generateConeTrack(track_points, file_name_, closed_loop, track_width)
+            self.generateConeTrack(track_points, file_name_, closed_loop, track_width, show_gazebo)
         else:
             self._generate_gazebot_standard(track_points, file_name_, closed_loop, track_width, track_height)
 
