@@ -228,6 +228,15 @@ class SplineDrawer(QMainWindow):
         self.path_item.setPath(QPainterPath())
         self.scene.update()
 
+    def shift_to_zero(self, point_list):
+        origin_x, origin_y = point_list[0][0], point_list[0][1]
+        newPointList = []
+        for i in range (len(point_list)):
+            shift_x, shift_y = point_list[i][0]-origin_x, point_list[i][1]-origin_y
+            newPointList.append((shift_x, shift_y))
+            
+        return newPointList
+
     def generate_path(self):
         # Generate the Gazebo world file with the walls
         point_list = []
@@ -246,6 +255,7 @@ class SplineDrawer(QMainWindow):
         for i, point in enumerate(x_):
             point_list.append((x_[i],y_[i]))
         
+        point_list = self.shift_to_zero(point_list)
         close_loop_status = self.close_loop_checkbox.isChecked()
         cone_track_status = self.cone_track_checkbox.isChecked()
         show_gazebo = self.show_gazebo_checkbox.isChecked()

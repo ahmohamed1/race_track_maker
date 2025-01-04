@@ -31,6 +31,7 @@ class TrackGenerator:
               PointList.append([point.x,point.y])
         PointList = np.array(PointList)
         return PointList
+    
     def plot_offset_polygons(self, buffer_value=0.03, coin_track=False):
         """
         Creates a polygon from a list of points and plots the original 
@@ -40,8 +41,10 @@ class TrackGenerator:
         """
         track_line = shp.LineString(self.track_points)
         # Create offset lines
-        outward_offset_line = track_line.parallel_offset(buffer_value, side='left')
-        inward_offset_line = track_line.parallel_offset(buffer_value, side='right')
+        # outward_offset_line = track_line.parallel_offset(buffer_value, side='left')
+        outward_offset_line = track_line.offset_curve(buffer_value)
+        inward_offset_line = track_line.offset_curve(-buffer_value,4,'round',10)
+        # inward_offset_line = track_line.parallel_offset(buffer_value, side='right')
 
         # Handle the case where offset lines may not form valid polygons
         if outward_offset_line.is_empty:
