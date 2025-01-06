@@ -79,6 +79,7 @@ class SplineDrawer(QMainWindow):
         self.track_height = 1
         self.track_generator = TrackGenerator(track_width=self.track_width)
         self.file_name = "race_track"
+        self.cone_distance = 1
 
         self.setWindowTitle("Race Track Maker")
         self.setGeometry(100, 100, 800, 600)
@@ -110,13 +111,17 @@ class SplineDrawer(QMainWindow):
         self.scaler_input = QLineEdit()
         self.scaler_input.setText(str(self.scaler))
         
-        self.track_width_label = QLabel("Track Width:")
+        self.track_width_label = QLabel("Track Width[m]")
         self.track_width_input = QLineEdit()
         self.track_width_input.setText(str(self.track_width))
 
-        self.track_height_label = QLabel("Height Width:")
+        self.track_height_label = QLabel("Height Width[m]")
         self.track_height_input = QLineEdit()
         self.track_height_input.setText(str(self.track_height))
+
+        self.cone_distance_label = QLabel("Distance between cones[m]")
+        self.cone_distance_input = QLineEdit()
+        self.cone_distance_input.setText(str(self.cone_distance))
 
         self.file_name_label = QLabel("file name")
         self.file_name_input = QLineEdit()
@@ -147,6 +152,10 @@ class SplineDrawer(QMainWindow):
         self.track_height_layout = QVBoxLayout()
         self.track_height_layout.addWidget(self.track_height_label)
         self.track_height_layout.addWidget(self.track_height_input)
+        
+        self.cone_distance_layout = QVBoxLayout()
+        self.cone_distance_layout.addWidget(self.cone_distance_label)
+        self.cone_distance_layout.addWidget(self.cone_distance_input)
 
 
         self.file_name_layout = QVBoxLayout()
@@ -169,6 +178,7 @@ class SplineDrawer(QMainWindow):
         self.input_layout.addLayout(self.scaler_layout)
         self.input_layout.addLayout(self.track_width_layout)
         self.input_layout.addLayout(self.track_height_layout)
+        self.input_layout.addLayout(self.cone_distance_layout)
         self.input_layout.addLayout(self.file_name_layout)
 
         # Create horizontal layout for buttons
@@ -245,6 +255,7 @@ class SplineDrawer(QMainWindow):
         scaler = float(self.scaler_input.text())
         track_width_ = float(self.track_width_input.text())
         track_height_ = float(self.track_height_input.text())
+        cone_distance_ = float(self.cone_distance_input.text())
         self.file_name = self.file_name_input.text()
         for i, point in enumerate(self.points):
             # print(f"({point.x()}, {point.y()})")
@@ -259,7 +270,7 @@ class SplineDrawer(QMainWindow):
         close_loop_status = self.close_loop_checkbox.isChecked()
         cone_track_status = self.cone_track_checkbox.isChecked()
         show_gazebo = self.show_gazebo_checkbox.isChecked()
-        self.track_generator.generate_track_world(point_list, self.file_name, cone_track_status, close_loop_status,track_width_, track_height_, show_gazebo)
+        self.track_generator.generate_track_world(point_list, self.file_name, cone_track_status, close_loop_status,track_width_, track_height_, cone_distance_, show_gazebo)
         # print(point_list)
         print("Path generated")
         

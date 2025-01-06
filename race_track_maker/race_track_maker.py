@@ -32,7 +32,7 @@ class TrackGenerator:
         PointList = np.array(PointList)
         return PointList
     
-    def plot_offset_polygons(self, buffer_value=0.03, coin_track=False):
+    def plot_offset_polygons(self, buffer_value=0.03, coin_track=False, cone_distance=1):
         """
         Creates a polygon from a list of points and plots the original 
         and offset polygons (representing walls).
@@ -72,8 +72,8 @@ class TrackGenerator:
         inward_polygon = shp.Polygon(inward_offset_line) if inward_offset_line else None
         
         if coin_track:
-          oo_points = self.split_line(outward_polygon,1.5)
-          in_points = self.split_line(inward_polygon, 1.5)
+          oo_points = self.split_line(outward_polygon,cone_distance)
+          in_points = self.split_line(inward_polygon, cone_distance)
           oo_x, oo_y = zip(*[(point.x, point.y) for point in oo_points.geoms])
           outerPointList = self.getnumpyArrayFromShape(oo_points)
           innetPointList = self.getnumpyArrayFromShape(in_points)
@@ -266,11 +266,11 @@ class TrackGenerator:
         else:
             print("Unable to generate offset lines. Please check your track points.")
     
-    def generateConeTrack(self, track_points, file_name_, closed_loop, track_width = 4, show_gazebo=False):
+    def generateConeTrack(self, track_points, file_name_, closed_loop, track_width = 4, cone_distance=1, show_gazebo=False):
         self.file_name = file_name_
         self.track_width = track_width
         self.set_track_points(track_points, closed_loop=closed_loop)
-        _, _, outward_pts, inward_pts = self.plot_offset_polygons(buffer_value=self.track_width / 2.0, coin_track=True)
+        _, _, outward_pts, inward_pts = self.plot_offset_polygons(buffer_value=self.track_width / 2.0, coin_track=True, cone_distance=cone_distance)
         stl_path = "cone_green.stl"  # Replace with your STL file path
         output_file = file_name_+".world"
         
@@ -279,10 +279,10 @@ class TrackGenerator:
             os.system(f'gazebo {output_file}')
 
     
-    def generate_track_world(self,track_points, file_name_, cone_track_status, closed_loop=False, track_width = 4, track_height = 1, show_gazebo=False):
+    def generate_track_world(self, track_points, file_name_, cone_track_status, closed_loop=False, track_width = 4, track_height = 1, coind_distance = 1, show_gazebo=False):
         self.coin_track = cone_track_status
         if self.coin_track:
-            self.generateConeTrack(track_points, file_name_, closed_loop, track_width, show_gazebo)
+            self.generateConeTrack(track_points, file_name_, closed_loop, track_width, coind_distance, show_gazebo)
         else:
             self._generate_gazebot_standard(track_points, file_name_, closed_loop, track_width, track_height)
 
